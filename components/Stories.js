@@ -15,7 +15,7 @@ function Stories() {
 	}, []);
 
 	return (
-		<div className="flex mt-5">
+		<div className="flex space-x-2 p-6 bg-red mt-8 border-black-200 border rounder-sm">
 			{profiles.map((profile) => (
 				<Story
 					key={profile.id}
