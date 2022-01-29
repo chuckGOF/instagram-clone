@@ -11,9 +11,11 @@ function Feed() {
 				<Posts />
 			</section>
 
-			<section className="hidden xl:col-span-1">
-				<MiniProfile />
-				<Suggestions />
+			<section className="xl:col-span-1">
+				<div className="fixed top-20">
+					<MiniProfile />
+					<Suggestions />
+				</div>
 			</section>
 		</main>
 	);
