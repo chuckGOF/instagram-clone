@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import {
 	SearchIcon,
@@ -14,7 +15,12 @@ function Header() {
 		<div className="shadow-sm border-b bg-white sticky top-0 z-50">
 			<div className="flex justify-between max-w-6xl mx-5 lg:mx-auto">
 				<div className="relative mt-5 hidden lg:inline-grid w-24 cursor-pointer">
-					<Image src="https://links.papareact.com/ocw" layout="fill" alt=""/>
+					<Image
+						src="https://links.papareact.com/ocw"
+						layout="fill"
+						alt=""
+						objectFit="contain"
+					/>
 					{/* <img
 						src="https://links.papareact.com/ocw"
 						alt=""
@@ -23,7 +29,12 @@ function Header() {
 				</div>
 
 				<div className="relative mt-3 w-10 lg:hidden flex-shrink-0 cursor-pointer">
-					<Image src="https://links.papareact.com/ocw" layout="fill" alt=""/>
+					<Image
+						src="https://links.papareact.com/jjm"
+						layout="fill"
+						alt=""
+						objectFit="contain"
+					/>
 					{/* <img
 						src="https://links.papareact.com/jjm"
 						alt=""
@@ -58,7 +69,7 @@ function Header() {
 					<HeartIcon className="navBtn" />
 
 					<img
-						src="https://links.papareact.com/3ke"
+						src="https://abia.net.au/wp-content/uploads/2021/05/LI.png"
 						alt="profile pic"
 						className="h-10 rounded-full cursor-pointer"
 					/>
