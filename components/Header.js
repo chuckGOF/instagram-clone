@@ -10,15 +10,25 @@ import {
 } from "@heroicons/react/outline";
 import { HomeIcon } from "@heroicons/react/solid";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
+import { modalState } from "../atoms/modalAtom";
+import { useRecoilState } from "recoil";
 
 function Header() {
 	const { data: session } = useSession();
+
+	// adding routing using next-router
+	const router = useRouter();
+
+	// using recoil for state management (recoil)
+	const [open, setOpen] = useRecoilState(modalState);
 
 	return (
 		<div className="shadow-sm border-b bg-white sticky top-0 z-50">
 			<div className="flex justify-between max-w-6xl mx-5 lg:mx-auto">
 				<div className="relative mt-5 hidden lg:inline-grid w-24 cursor-pointer">
 					<Image
+						onClick={() => router.push("/")}
 						src="https://links.papareact.com/ocw"
 						layout="fill"
 						alt=""
@@ -28,6 +38,7 @@ function Header() {
 
 				<div className="relative mt-3 w-10 lg:hidden flex-shrink-0 cursor-pointer">
 					<Image
+						onClick={() => router.push("/")}
 						src="https://links.papareact.com/jjm"
 						layout="fill"
 						alt=""
@@ -49,9 +60,11 @@ function Header() {
 				</div>
 
 				<div className="flex items-center justify-end space-x-4">
-					<HomeIcon className="navBtn" />
+					<HomeIcon
+						onClick={() => router.push("/")}
+						className="navBtn"
+					/>
 					<MenuIcon className="h-6 md:hidden cursor-pointer" />
-
 					{session ? (
 						<>
 							<div className="relative navBtn">
@@ -60,7 +73,10 @@ function Header() {
 									3
 								</div>
 							</div>
-							<PlusCircleIcon className="navBtn" />
+							<PlusCircleIcon
+								onClick={() => setOpen(true)}
+								className="navBtn"
+							/>
 							<UserGroupIcon className="navBtn" />
 							<HeartIcon className="navBtn" />
 
