@@ -19,9 +19,9 @@ function Posts() {
 
 	return (
 		<div>
-			{posts.map((post) => (
+			{posts.map((post, index) => (
 				<Post
-					key={post.id}
+					key={index}
 					username={post.username}
 					userImg={post.userImg}
 					img={post.image}
