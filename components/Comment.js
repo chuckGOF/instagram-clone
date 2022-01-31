@@ -1,5 +1,5 @@
 import React from "react";
-import Moment from 'moment'
+import Moment from 'react-moment'
 
 function Comment({ comment, username, userImage, timestamp }) {
 	return (

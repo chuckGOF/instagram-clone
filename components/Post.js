@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import {
 	addDoc,
 	collection,
+	deleteDoc,
 	doc,
 	getDocs,
 	onSnapshot,
@@ -50,6 +51,14 @@ function Post({ id, username, userImg, img, caption }) {
 			),
 		[db, id]
 	);
+
+	useEffect(
+		() =>
+			setHasLiked(
+				likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+			),
+		[likes]
+	);
 	// async () => {
 	// 	const queryComments = await getDocs(
 	// 		collection(db, "posts", id, "comments"),
@@ -60,11 +69,14 @@ function Post({ id, username, userImg, img, caption }) {
 	// 	console.log(comments);
 	// }
 
-	const likePost = async (e) => {
-		e.preventDefault();
-		await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
-			username: session.user.username,
-		});
+	const likePost = async () => {
+		if (hasLiked) {
+			await deleteDoc(doc(db, "posts", id, "likes", session?.user?.uid));
+		} else {
+			await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
+				username: session.user.username,
+			});
+		}
 	};
 
 	const postComment = async (e) => {
@@ -76,9 +88,9 @@ function Post({ id, username, userImg, img, caption }) {
 			collection(db, /*`posts/${id}/comments`*/ "posts", id, "comments"),
 			{
 				comment: message,
-				username: "fadeelgbaiye",
-				userImage:
-					"https://firebasestorage.googleapis.com/v0/b/instagram-clone-a3667.appspot.com/o/posts%2FogDe8zBeUrPZPGRF6JFQ%2Fimage?alt=media&token=5084bb38-faf5-478a-a1cd-29ab3e2d5f48",
+				username: session?.user?.username,
+				userImage: serssion?.user?.image,
+				//	"https://firebasestorage.googleapis.com/v0/b/instagram-clone-a3667.appspot.com/o/posts%2FogDe8zBeUrPZPGRF6JFQ%2Fimage?alt=media&token=5084bb38-faf5-478a-a1cd-29ab3e2d5f48",
 				timestamp: serverTimestamp(),
 			}
 		);
@@ -98,26 +110,28 @@ function Post({ id, username, userImg, img, caption }) {
 
 			<img className="object-cover w-full" src={img} alt="image" />
 
-			{/* {session && (
+			{session && (
 				<div className="flex justify-between px-4 pt-4">
 					<div className="flex space-x-4">
-						<HeartIcon className="btn" />
+						{hasLiked ? (
+							<HeartIconFilled
+								onClick={likePost}
+								className="btn text-red-500"
+							/>
+						) : (
+							<HeartIcon onClick={likePost} className="btn" />
+						)}
 						<ChatIcon className="btn" />
 						<PaperAirplaneIcon className="btn" />
 					</div>
 					<BookmarkIcon className="btn" />
 				</div>
-			)} */}
-			<div className="flex justify-between px-4 pt-4">
-				<div className="flex space-x-4">
-					<HeartIcon onClick={likePost} className="btn" />
-					<ChatIcon className="btn" />
-					<PaperAirplaneIcon className="btn" />
-				</div>
-				<BookmarkIcon className="btn" />
-			</div>
+			)}
 
 			<p className="p-5 truncate">
+				{likes.length > 0 && (
+					<p className="font-bold mb-1">{likes.length} likes</p>
+				)}
 				<span className="font-bold mr-1">{username}</span>
 				{caption}
 			</p>
@@ -137,7 +151,7 @@ function Post({ id, username, userImg, img, caption }) {
 				</div>
 			)}
 
-			{/* {session && (
+			{session && (
 				<form className="flex items-center p-4">
 					<EmojiHappyIcon className="h-7" />
 					<input
@@ -149,26 +163,7 @@ function Post({ id, username, userImg, img, caption }) {
 						Post
 					</button>
 				</form>
-			)} */}
-
-			<form className="flex items-center p-4">
-				<EmojiHappyIcon className="h-7" />
-				<input
-					value={comment}
-					onChange={(e) => setComment(e.target.value)}
-					placeholder="Add a comment"
-					className="border-none flex-1 focus:ring-0 outline-none"
-					type="text"
-				/>
-				<button
-					onClick={postComment}
-					disabled={!comment.trim()}
-					type="submit"
-					className="font-semibold text-blue-400"
-				>
-					Post
-				</button>
-			</form>
+			)}
 		</div>
 	);
 }
