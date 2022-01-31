@@ -1,34 +1,31 @@
-import React from "react";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { db } from "../firebase";
 import Post from "./Post";
 
-const posts = [
-	{
-		id: "123",
-		username: "fadeel",
-		userImg: "https://abia.net.au/wp-content/uploads/2021/05/LI.png",
-		img: "https://abia.net.au/wp-content/uploads/2021/05/LI.png",
-		caption: "this is dope",
-	},
-
-	{
-		id: "234",
-		username: "adesewa",
-		userImg: "https://abia.net.au/wp-content/uploads/2021/05/LI.png",
-		img: "https://abia.net.au/wp-content/uploads/2021/05/LI.png",
-		caption: "this is dope",
-	},
-];
-
 function Posts() {
+	const [posts, setPosts] = useState([]);
+
+	useEffect(
+		() =>
+			onSnapshot(
+				query(collection(db, "posts"), orderBy("timestamp", "desc")),
+				(snapshot) => {
+					setPosts(snapshot.docs.map((snap) => snap.data()));
+				}
+			),
+		[]
+	);
+
 	return (
 		<div>
 			{posts.map((post) => (
 				<Post
 					key={post.id}
 					username={post.username}
-                    userImg={post.userImg}
-                    img={post.img}
-                    caption={post.caption}
+					userImg={post.userImg}
+					img={post.image}
+					caption={post.caption}
 				/>
 			))}
 		</div>
